@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-07-03T13:49:17.517567",
+  "data": {
+    "strikeout_props": {
+      "Brandon Walter": "4.5",
+      "Kyle Freeland": "3.5",
+      "Jake Irvin": "4.5",
+      "Dietrich Enns": "3.5",
+      "Chris Bassitt": "5.5",
+      "Clarke Schmidt": "4.5",
+      "David Peterson": "4.5",
+      "Jose Quintana": "3.5",
+      "Bryce Elder": "4.5",
+      "Jose Soriano": "4.5",
+      "Cade Horton": "3.5",
+      "Robbie Ray": "6.5",
+      "Brandon Pfaadt": "4.5",
+      "Dustin May": "4.5",
+      "Aaron Civale": "3.5",
+      "Seth Lugo": "5.5",
+      "Logan Evans": "3.5"
+    },
+    "all_pitchers": [
+      "Brandon Walter",
+      "Kyle Freeland",
+      "Jake Irvin",
+      "Dietrich Enns",
+      "Chris Bassitt",
+      "Clarke Schmidt",
+      "David Peterson",
+      "Jose Quintana",
+      "Bryce Elder",
+      "Jose Soriano",
+      "Cade Horton",
+      "Robbie Ray",
+      "Brandon Pfaadt",
+      "Dustin May",
+      "Aaron Civale",
+      "Seth Lugo",
+      "Logan Evans"
+    ]
+  }
+}

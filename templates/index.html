@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB Probable Pitchers Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script
+        src="https://app.rybbit.io/api/script.js"
+        data-site-id="1294"
+        defer
+    ></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-baseball-ball me-2"></i>
+                MLB Probable Pitchers
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pitchers">Today's Pitchers</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="refreshBtn" onclick="refreshData()">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh Data
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        <i class="fas fa-baseball-ball me-3"></i>
+                        Today's Probable Pitchers
+                    </h1>
+                    <p class="lead text-white-50 mb-4">
+                        Live probable pitcher information for today's MLB games
+                    </p>
+                    <div class="hero-stats">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-calendar-day fa-2x text-primary mb-2"></i>
+                                    <h4>{{ starting_pitchers|length }}</h4>
+                                    <p>Games Today</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                                    <h4>{{ starting_pitchers|selectattr('game_time', 'ne', 'TBD')|list|length }}</h4>
+                                    <p>Times Set</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-user fa-2x text-warning mb-2"></i>
+                                    <h4>{{ starting_pitchers|selectattr('away_pitcher', 'ne', 'TBD')|selectattr('away_strikeouts', 'ne', 'Not Available')|list|length + starting_pitchers|selectattr('home_pitcher', 'ne', 'TBD')|selectattr('home_strikeouts', 'ne', 'Not Available')|list|length }}</h4>
+                                    <p>Pitchers with Props</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pitchers Section -->
+    <section id="pitchers" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">Today's Probable Pitchers</h2>
+                    <div class="section-divider"></div>
+                    <p class="lead">All probable pitchers for {{ datetime.now().strftime('%A, %B %d, %Y') }}</p>
+                </div>
+            </div>
+            
+            {% if starting_pitchers %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="pitchers-list">
+                            {% for game in starting_pitchers %}
+                                {% if game.away_pitcher != 'TBD' and game.away_strikeouts != 'Not Available' %}
+                                <div class="pitcher-item">
+                                    <div class="pitcher-card">
+                                        <div class="pitcher-info">
+                                            <div class="pitcher-name">{{ game.away_pitcher }}</div>
+                                            <div class="strikeout-prop">
+                                                K O/U: {{ game.away_strikeouts }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if game.home_pitcher != 'TBD' and game.home_strikeouts != 'Not Available' %}
+                                <div class="pitcher-item">
+                                    <div class="pitcher-card">
+                                        <div class="pitcher-info">
+                                            <div class="pitcher-name">{{ game.home_pitcher }}</div>
+                                            <div class="strikeout-prop">
+                                                K O/U: {{ game.home_strikeouts }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="no-pitchers">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <h3>No Probable Pitchers</h3>
+                            <p class="text-muted">There are no probable pitchers scheduled for today.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; {{ year }} MLB Probable Pitchers. Data sourced from MLB.com</p>
+        </div>
+    </footer>
+
+    <!-- Toast for refresh notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="refreshToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong class="me-auto">Data Refresh</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Refreshing data...
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+        function refreshData() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const toast = new bootstrap.Toast(document.getElementById('refreshToast'));
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Disable button and show loading state
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...';
+            toastMessage.textContent = 'Refreshing data...';
+            toast.show();
+            
+            // Make API call to refresh data
+            fetch('/refresh-data')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        toastMessage.textContent = data.message;
+                        // Reload the page after a short delay to show new data
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        toastMessage.textContent = 'Error: ' + data.message;
+                        refreshBtn.disabled = false;
+                        refreshBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i>Refresh Data';
+                    }
+                })
+                .catch(error => {
+                    toastMessage.textContent = 'Error refreshing data: ' + error.message;
+                    refreshBtn.disabled = false;
+                    refreshBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i>Refresh Data';
+                });
+        }
+    </script>
+</body>
+</html> 
