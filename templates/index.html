@@ -53,21 +53,14 @@
                     </p>
                     <div class="hero-stats">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="stat-card">
                                     <i class="fas fa-calendar-day fa-2x text-primary mb-2"></i>
                                     <h4>{{ starting_pitchers|length }}</h4>
                                     <p>Games Today</p>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="stat-card">
-                                    <i class="fas fa-clock fa-2x text-success mb-2"></i>
-                                    <h4>{{ starting_pitchers|selectattr('game_time', 'ne', 'TBD')|list|length }}</h4>
-                                    <p>Times Set</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="stat-card">
                                     <i class="fas fa-user fa-2x text-warning mb-2"></i>
                                     <h4>{{ starting_pitchers|selectattr('away_pitcher', 'ne', 'TBD')|selectattr('away_strikeouts', 'ne', 'Not Available')|list|length + starting_pitchers|selectattr('home_pitcher', 'ne', 'TBD')|selectattr('home_strikeouts', 'ne', 'Not Available')|list|length }}</h4>
